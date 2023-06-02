@@ -76,3 +76,29 @@ function increment(digits) {
 	return digits;
 }
 console.log(increment([4, 6, 7]));
+
+/*
+
+Question 6
+
+Given a non-empty array of integers nums, every element appears twice except
+for one. Find that single one.
+
+You must implement a solution with a linear runtime complexity and use only
+constant extra space.
+
+Example 1:
+Input: nums = [2,2,1]
+Output: 1
+
+*/
+
+// Solution 6
+
+function find(nums) {
+	let uniqueNum = 0;
+	for (const num of nums) {
+		uniqueNum = uniqueNum ^ num;
+	}
+	return uniqueNum;
+}
