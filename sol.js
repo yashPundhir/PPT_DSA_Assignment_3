@@ -2,6 +2,211 @@
 
 /*
 
+Question 1
+Given an integer array nums of length n and an integer target, find three integers
+in nums such that the sum is closest to the target.
+Return the sum of the three integers.
+
+You may assume that each input would have exactly one solution.
+
+Example 1:
+Input: nums = [-1,2,1,-4], target = 1
+Output: 2
+
+Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+*/
+
+// Solution
+
+function threeSumClosest(nums, target) {
+	nums.sort((a, b) => a - b);
+	const n = nums.length;
+	let closestSum = Infinity;
+
+	for (let i = 0; i < n - 2; i++) {
+		if (i > 0 && nums[i] === nums[i - 1]) {
+			continue;
+		}
+
+		let left = i + 1;
+		let right = n - 1;
+
+		while (left < right) {
+			const currentSum = nums[i] + nums[left] + nums[right];
+
+			if (Math.abs(currentSum - target) < Math.abs(closestSum - target)) {
+				closestSum = currentSum;
+			}
+
+			if (currentSum < target) {
+				left++;
+			} else if (currentSum > target) {
+				right--;
+			} else {
+				return target;
+			}
+		}
+	}
+
+	return closestSum;
+}
+
+const nums = [-1, 2, 1, -4];
+const target = 1;
+const result = threeSumClosest(nums, target);
+console.log(result);
+
+/*
+
+Question 2
+Given an array nums of n integers, return an array of all the unique quadruplets
+[nums[a], nums[b], nums[c], nums[d]] such that:
+           ● 0 <= a, b, c, d < n
+           ● a, b, c, and d are distinct.
+           ● nums[a] + nums[b] + nums[c] + nums[d] == target
+
+You may return the answer in any order.
+
+Example 1:
+Input: nums = [1,0,-1,0,-2,2], target = 0
+Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+*/
+
+// Solution
+
+function fourSum(nums, target) {
+	const n = nums.length;
+	const result = [];
+
+	nums.sort((a, b) => a - b); // Step 1: Sort the array
+
+	for (let i = 0; i < n - 3; i++) {
+		if (i > 0 && nums[i] === nums[i - 1]) {
+			continue;
+		}
+
+		for (let j = i + 1; j < n - 2; j++) {
+			if (j > i + 1 && nums[j] === nums[j - 1]) {
+				continue;
+			}
+
+			let left = j + 1;
+			let right = n - 1;
+
+			while (left < right) {
+				const sum = nums[i] + nums[j] + nums[left] + nums[right];
+
+				if (sum === target) {
+					result.push([nums[i], nums[j], nums[left], nums[right]]);
+					left++;
+					right--;
+
+					while (left < right && nums[left] === nums[left - 1]) {
+						left++;
+					}
+
+					while (left < right && nums[right] === nums[right + 1]) {
+						right--;
+					}
+				} else if (sum < target) {
+					left++;
+				} else {
+					right--;
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+// Example usage:
+const nums = [1, 0, -1, 0, -2, 2];
+const target = 0;
+console.log(fourSum(nums, target));
+// Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
+
+/*
+
+**Question 3**
+A permutation of an array of integers is an arrangement of its members into a
+sequence or linear order.
+
+For example, for arr = [1,2,3], the following are all the permutations of arr:
+[1,2,3], [1,3,2], [2, 1, 3], [2, 3, 1], [3,1,2], [3,2,1].
+
+The next permutation of an array of integers is the next lexicographically greater
+permutation of its integer. More formally, if all the permutations of the array are
+sorted in one container according to their lexicographical order, then the next
+permutation of that array is the permutation that follows it in the sorted container.
+
+If such an arrangement is not possible, the array must be rearranged as the
+lowest possible order (i.e., sorted in ascending order).
+
+● For example, the next permutation of arr = [1,2,3] is [1,3,2].
+● Similarly, the next permutation of arr = [2,3,1] is [3,1,2].
+● While the next permutation of arr = [3,2,1] is [1,2,3] because [3,2,1] does not
+have a lexicographical larger rearrangement.
+
+Given an array of integers nums, find the next permutation of nums.
+The replacement must be in place and use only constant extra memory.
+
+**Example 1:**
+Input: nums = [1,2,3]
+Output: [1,3,2]
+
+*/
+
+// Solution
+
+function nextPermutation(nums) {
+	const n = nums.length;
+	let i = n - 2;
+
+	// Step 1: Find the first pair `nums[i]` and `nums[i-1]` such that `nums[i] > nums[i-1]`
+	while (i >= 0 && nums[i] >= nums[i + 1]) {
+		i--;
+	}
+
+	if (i >= 0) {
+		let j = n - 1;
+		// Step 2: Find the smallest element `nums[j]` such that `nums[j] > nums[i-1]`
+		while (j >= 0 && nums[j] <= nums[i]) {
+			j--;
+		}
+		// Step 3: Swap `nums[i-1]` with `nums[j]`
+		swap(nums, i, j);
+	}
+
+	// Step 4: Reverse the subarray starting from index `i` onwards
+	reverse(nums, i + 1);
+
+	return nums;
+}
+
+function swap(nums, i, j) {
+	const temp = nums[i];
+	nums[i] = nums[j];
+	nums[j] = temp;
+}
+
+function reverse(nums, start) {
+	let i = start;
+	let j = nums.length - 1;
+	while (i < j) {
+		swap(nums, i, j);
+		i++;
+		j--;
+	}
+}
+
+const nums = [1, 2, 3];
+console.log(nextPermutation(nums)); // Output: [1, 3, 2]
+
+/*
+
 Question 4
 
 Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
